@@ -20,13 +20,13 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
 
       - name: Add EC2 host to known_hosts
-        run: |
-          ssh-keyscan -H 16.171.159.192 >> ~/.ssh/known_hosts
+        run: ssh-keyscan -H 16.171.159.192 >> ~/.ssh/known_hosts
+
+      - name: Test SSH connection
+        run: ssh -i ~/.ssh/id_rsa ubuntu@16.171.159.192 echo "SSH connection successful"
 
       - name: Copy project to EC2
-        run: |
-          scp -o StrictHostKeyChecking=no -r ./* ubuntu@16.171.159.192:/home/ubuntu/app-test/
+        run: scp -o StrictHostKeyChecking=no -r ./* ubuntu@16.171.159.192:/home/ubuntu/app-test/
 
       - name: Execute deployment script
-        run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@16.171.159.192 "bash /home/ubuntu/app-test/deploy.sh"
+        run: ssh -i ~/.ssh/id_rsa ubuntu@16.171.159.192 "bash /home/ubuntu/app-test/deploy.sh"
