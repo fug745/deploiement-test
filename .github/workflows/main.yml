@@ -19,6 +19,10 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
+      - name: Add EC2 host to known_hosts
+        run: |
+          ssh-keyscan -H 16.171.159.192 >> ~/.ssh/known_hosts
+
       - name: Copy project to EC2
         run: |
           scp -o StrictHostKeyChecking=no -r ./* ubuntu@16.171.159.192:/home/ubuntu/app-test/
